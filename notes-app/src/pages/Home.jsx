@@ -55,11 +55,13 @@ const Home = () => {
               key={ele._id}
               alignItems="flex-start"
               border="1px solid black"
+              borderBottom='10px solid #866804'
               rounded="xl"
               shadow="2xl"
               p={3}
+              bg='yellow.500'
             >
-              <Heading as="h2" color="red" fontSize="xl">
+              <Heading as="h2" color="red.700" fontSize="xl">
                 {ele.title}
               </Heading>
 
