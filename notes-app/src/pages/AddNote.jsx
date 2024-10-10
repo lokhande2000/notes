@@ -5,19 +5,17 @@ import {
   Input,
   Textarea,
   VStack,
-  Text,
-  Alert,
-  AlertIcon,
+  useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 const AddNote = () => {
   const [note, setNote] = useState({ title: "", description: "" });
   const [error, setError] = useState({ title: "", description: "" });
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [apiError, setApiError] = useState("");
+  const toastSuccess = useToast();
+  const toastFailed = useToast();
 
   const { title, description } = note;
 
@@ -54,23 +52,32 @@ const AddNote = () => {
 
     setError({ title: "", description: "" });
     setLoading(true);
-    setApiError("");
-    setSuccessMessage("");
 
     try {
       const res = await axios.post(
         "https://notes-sblz.onrender.com/note/notes",
         note
       );
-      console.log(res);
+      // console.log(res);
       if (res.status === 201) {
-        setSuccessMessage("Note added successfully!");
+        toastSuccess({
+          title: "Note added successfully!",
+          status: "success",
+          position: "top",
+          duration: 9000,
+          isClosable: true,
+        });
         // Clear the form after submission
         setNote({ title: "", description: "" });
       }
     } catch (error) {
-      setApiError("Failed to add note. Please try again.");
-      console.error("Error adding note:", error);
+      toastFailed({
+        title: "Failed to add note. Please try again !",
+        status: "error",
+        position: "top",
+        duration: 9000,
+        isClosable: true,
+      });
     } finally {
       setLoading(false);
     }
@@ -94,26 +101,12 @@ const AddNote = () => {
             gap: "20px",
             alignItems: "flex-start",
             backgroundColor: "#373b53",
-            padding: "20px",
+            padding: "80px",
             color: "#fff",
             borderRadius: "5px",
             boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
           }}
         >
-          {/* Display success or error messages inside the form */}
-          {apiError && (
-            <Alert status="error" variant="left-accent" colorScheme="green">
-              <AlertIcon />
-              {apiError}
-            </Alert>
-          )}
-          {successMessage && (
-            <Alert status="success" variant="left-accent" colorScheme="green">
-              <AlertIcon />
-              {successMessage}
-            </Alert>
-          )}
-
           <FormControl isInvalid={!!error.title}>
             <Input
               value={title}

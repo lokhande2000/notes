@@ -5,6 +5,7 @@ import {
   HStack,
   SimpleGrid,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -14,6 +15,7 @@ import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 const Home = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const toast = useToast()
 
   const getData = async () => {
     try {
@@ -27,12 +29,19 @@ const Home = () => {
   };
 
   const handleDelete = async (id) => {
-    console.log(id);
+    // console.log(id);
     try {
       let res = await axios.delete(
         `https://notes-sblz.onrender.com/note/notes/${id}`
       ); // Added '/' before id
-      console.log(res.data); // logging the response data
+      toast({
+        title: 'Note delete succesfully.',
+        status: 'success',
+        position: 'top',
+        duration: 9000,
+        isClosable: true,
+      })
+      // console.log(res.data); // logging the response data
     } catch (error) {
       console.log(error.response ? error.response.data : error.message);
     }
