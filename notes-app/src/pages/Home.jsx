@@ -58,7 +58,7 @@ const Home = () => {
       {loading ? (
         <h1>Loading</h1>
       ) : (
-        <SimpleGrid columns={4} spacing={10}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={10}>
           {data?.map((ele) => (
             <VStack
               key={ele._id}
